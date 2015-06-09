@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Change the Color</string>
+    <string name="bg_color_bundle_id">BG_COLOR</string>
+    <string name="bg_color_int_id">BG_COLOR_INT</string>
+</resources>
