@@ -38,16 +38,13 @@ public class MainActivity extends Activity implements
          dataItems.release();
       }
    };
+   private final WearMessageReceiver _messageReceiver = new WearMessageReceiver();
 
    @Override
    protected void onCreate( Bundle savedInstanceState ) {
       super.onCreate( savedInstanceState );
 
       setContentView( R.layout.activity_main );
-
-      IntentFilter messageFilter = new IntentFilter( Intent.ACTION_SEND );
-      WearMessageReceiver messageReceiver = new WearMessageReceiver();
-      LocalBroadcastManager.getInstance( this ).registerReceiver( messageReceiver, messageFilter );
 
       _googleApiClient = new GoogleApiClient.Builder( this )
               .addApi( Wearable.API )
@@ -59,7 +56,11 @@ public class MainActivity extends Activity implements
    @Override
    protected void onStart() {
       super.onStart();
+
       _googleApiClient.connect();
+
+      IntentFilter messageFilter = new IntentFilter( Intent.ACTION_SEND );
+      LocalBroadcastManager.getInstance( this ).registerReceiver( _messageReceiver, messageFilter );
    }
 
    @Override
@@ -67,6 +68,9 @@ public class MainActivity extends Activity implements
       if ( _googleApiClient != null && _googleApiClient.isConnected() ) {
          _googleApiClient.disconnect();
       }
+
+      LocalBroadcastManager.getInstance( this ).unregisterReceiver( _messageReceiver );
+
       super.onStop();
    }
 
